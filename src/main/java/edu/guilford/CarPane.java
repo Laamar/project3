@@ -9,7 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 public class CarPane extends GridPane {
-
 //add the car attribute
 private Car car;
 //add the labels attributes
@@ -24,6 +23,10 @@ private Label ownerLabel;
 private Label ownerAddressLabel;
 private Label ownerPhoneLabel;
 private Label ownerEmailLabel;
+private Label priceErrorLabel;
+private Label yearErrorLabel;
+private Label makeErrorLabel;
+private Label ownerPhoneErrorLabel;
 
 //add the text fields attributes
 private TextField makeTextField;
@@ -82,6 +85,10 @@ ColorButton = new Button("Change Color");
     ownerAddressLabel = new Label("Owner Address: "+car.getOwnerAddress());
     ownerPhoneLabel = new Label("Owner Phone: "+car.getOwnerPhone());
     ownerEmailLabel = new Label("Owner Email: "+car.getOwnerEmail());
+    priceErrorLabel = new Label("");
+    yearErrorLabel = new Label("");
+    makeErrorLabel = new Label("");
+    ownerPhoneErrorLabel = new Label("");
 
 
     //instantiate the text fields
@@ -126,6 +133,11 @@ ColorButton = new Button("Change Color");
     this.add(ownerAddressLabel, 0, 8);
     this.add(ownerPhoneLabel, 0, 9);
     this.add(ownerEmailLabel, 0, 10);
+    this.add(priceErrorLabel, 2, 3);
+    this.add(yearErrorLabel, 2, 2);
+    this.add(makeErrorLabel, 2, 0);
+    this.add(ownerPhoneErrorLabel, 2, 9);
+
 
     //add the text fields to the pane
     this.add(makeTextField, 1, 0);
@@ -139,6 +151,7 @@ ColorButton = new Button("Change Color");
     this.add(ownerAddressTextField, 1, 8);
     this.add(ownerPhoneTextField, 1, 9);
     this.add(ownerEmailTextField, 1, 10);
+
     //add the imageview to the pane next to the text fields
     this.add(imageView, 2, 0, 1, 11);
 
@@ -154,15 +167,60 @@ ColorButton = new Button("Change Color");
    //add a listener that will update the car object when the button is clicked
     addButton.setOnAction(e -> {
          //update the car object
+
+         //add a try catch block to validate the make so no integers are entered
+            try{
+                car.setMake(makeTextField.getText());
+                makeLabel.setText("Make: "+car.getMake());
+                makeLabel.setStyle("-fx-text-fill: black;");
+            }catch(NumberFormatException ex){
+                //  System.out.println("Invalid make");
+                makeErrorLabel.setText("Invalid make");
+                makeErrorLabel.setStyle("-fx-text-fill: red;");
+                }
          car.setMake(makeTextField.getText());
+
          car.setModel(modelTextField.getText());
+
+         //add a try catch block to validate the year entered as an integer in 4 digits
+            try{
+                car.setYear(Integer.parseInt(yearTextField.getText()));
+                yearErrorLabel.setText("");
+            }catch(NumberFormatException ex){
+                //  System.out.println("Invalid year");
+                yearErrorLabel.setText("Invalid year");
+                yearErrorLabel.setStyle("-fx-text-fill: red;");
+                
+                }
+
+
          car.setYear(Integer.parseInt(yearTextField.getText()));
-         car.setPrice(Double.parseDouble(priceTextField.getText()));
+
+         //add a try catch block to validate the price
+            try{
+                car.setPrice(Double.parseDouble(priceTextField.getText()));
+            }catch(NumberFormatException ex){
+              //  System.out.println("Invalid price");
+              priceErrorLabel.setText("Invalid price");
+              priceErrorLabel.setStyle("-fx-text-fill: red;");
+              
+            }
+
+         //car.setPrice(Double.parseDouble(priceTextField.getText()));
          car.setColor(colorTextField.getText());
          car.setVin(vinTextField.getText());
          car.setLicensePlate(licensePlateTextField.getText());
          car.setOwner(ownerTextField.getText());
          car.setOwnerAddress(ownerAddressTextField.getText());
+         //add a try catch block to catch the exception if the phone number is not entered correctly
+            try{
+                car.setOwnerPhone(ownerPhoneTextField.getText());
+            }catch(NumberFormatException ex){
+                //  System.out.println("Invalid phone number");
+                ownerPhoneErrorLabel.setText("Invalid phone number");
+                ownerPhoneErrorLabel.setStyle("-fx-text-fill: red;");
+                }
+               
          car.setOwnerPhone(ownerPhoneTextField.getText());
          car.setOwnerEmail(ownerEmailTextField.getText());
     
@@ -186,9 +244,17 @@ ColorButton = new Button("Change Color");
         //set the background color
         this.setStyle("-fx-background-color: "+colorTextField.getText()+";");
     });
+//Instanite the exception class
+class NumberFormatException extends Exception{
+    //constructor
+    public NumberFormatException(String message){
+        super(message);
+    }
 
 
 }
 
 
 }
+    
+    }
